@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gb.dao.WorkbookMapper" >
+  <resultMap id="BaseResultMap" type="com.gb.pojo.Workbook" >
+    <id column="ID" property="id" jdbcType="DECIMAL" />
+    <result column="CODE" property="code" jdbcType="VARCHAR" />
+    <result column="DESCRIBE" property="describe" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, CODE, DESCRIBE, TYPE
+  </sql>
+
+
+  <select id="selectPayType" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List" />
+    FROM tb_workbook WHERE
+    type = 'fkfs'
+  </select>
+
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.math.BigDecimal" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_WORKBOOK
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.math.BigDecimal" >
+    delete from TB_WORKBOOK
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="insert" parameterType="com.gb.pojo.Workbook" >
+    insert into TB_WORKBOOK (ID, CODE, DESCRIBE, 
+      TYPE)
+    values (#{id,jdbcType=DECIMAL}, #{code,jdbcType=VARCHAR}, #{describe,jdbcType=VARCHAR}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gb.pojo.Workbook" >
+    insert into TB_WORKBOOK
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="code != null" >
+        CODE,
+      </if>
+      <if test="describe != null" >
+        DESCRIBE,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=DECIMAL},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gb.pojo.Workbook" >
+    update TB_WORKBOOK
+    <set >
+      <if test="code != null" >
+        CODE = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="describe != null" >
+        DESCRIBE = #{describe,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gb.pojo.Workbook" >
+    update TB_WORKBOOK
+    set CODE = #{code,jdbcType=VARCHAR},
+      DESCRIBE = #{describe,jdbcType=VARCHAR},
+      TYPE = #{type,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

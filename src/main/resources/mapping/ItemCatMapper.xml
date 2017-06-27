@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gb.dao.ItemCatMapper" >
+  <resultMap id="BaseResultMap" type="com.gb.pojo.ItemCat" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="PARENT_ID" property="parentId" jdbcType="INTEGER" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="STATUS" property="status" jdbcType="INTEGER" />
+    <result column="SORT_ORDER" property="sortOrder" jdbcType="INTEGER" />
+    <result column="IS_PARENT" property="isParent" jdbcType="INTEGER" />
+    <result column="CREATED" property="created" jdbcType="TIMESTAMP" />
+    <result column="UPDATED" property="updated" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, PARENT_ID, NAME, STATUS, SORT_ORDER, IS_PARENT, CREATED, UPDATED
+  </sql>
+
+  <select id="selectItemCat" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from tb_ITEM_CAT
+  </select>
+
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_ITEM_CAT
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_ITEM_CAT
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gb.pojo.ItemCat" >
+    insert into tb_ITEM_CAT (ID, PARENT_ID, NAME, 
+      STATUS, SORT_ORDER, IS_PARENT, 
+      CREATED, UPDATED)
+    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{sortOrder,jdbcType=INTEGER}, #{isParent,jdbcType=INTEGER}, 
+      #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gb.pojo.ItemCat" >
+    insert into tb_ITEM_CAT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="sortOrder != null" >
+        SORT_ORDER,
+      </if>
+      <if test="isParent != null" >
+        IS_PARENT,
+      </if>
+      <if test="created != null" >
+        CREATED,
+      </if>
+      <if test="updated != null" >
+        UPDATED,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isParent != null" >
+        #{isParent,jdbcType=INTEGER},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updated != null" >
+        #{updated,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gb.pojo.ItemCat" >
+    update tb_ITEM_CAT
+    <set >
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="sortOrder != null" >
+        SORT_ORDER = #{sortOrder,jdbcType=INTEGER},
+      </if>
+      <if test="isParent != null" >
+        IS_PARENT = #{isParent,jdbcType=INTEGER},
+      </if>
+      <if test="created != null" >
+        CREATED = #{created,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updated != null" >
+        UPDATED = #{updated,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gb.pojo.ItemCat" >
+    update tb_ITEM_CAT
+    set PARENT_ID = #{parentId,jdbcType=INTEGER},
+      NAME = #{name,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=INTEGER},
+      SORT_ORDER = #{sortOrder,jdbcType=INTEGER},
+      IS_PARENT = #{isParent,jdbcType=INTEGER},
+      CREATED = #{created,jdbcType=TIMESTAMP},
+      UPDATED = #{updated,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

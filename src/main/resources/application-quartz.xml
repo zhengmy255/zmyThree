@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+	<!-- 注入定时任务对应的  类    -->
+	<bean id="quartzJobs" class="com.gb.quartz.QuartzJobs"></bean>
+
+	<!--定义要调用的 定时任务类  以及  调用的定时任务类中的 具体定时执行的方法   -->
+	<bean id="sendEmail"  class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!--属性注入  定时任务类 -->
+		<property name="targetObject">
+			<!-- ref 给引用类型的属性 进行 赋值-->
+			<ref bean="quartzJobs"></ref>
+		</property>
+		<!-- 属性注入 定时执行的方法-->
+		<property name="targetMethod">
+			<!-- value 给基本类型和string类型的属性赋值 -->
+			<value>sendEmail</value>
+		</property>
+	</bean>
+
+	<!--printTime 定时任务-->
+   <bean id="printTime" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="quartzJobs"></ref>
+		</property>
+	   <property name="targetMethod">
+		   <value>printTime</value>
+	   </property>
+   </bean>
+
+
+	<!--printTime 时间间隔触发器-->
+	<bean id="cranTiggerPrintTime" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" >
+			<ref bean="printTime"></ref>
+		</property>
+		<property name="cronExpression" value="0/10 * * * * ? *"></property>
+	</bean>
+
+
+	<!-- ======================== 时间间隔触发器 ======================== -->
+	<bean id="CronTriggerSendEmail" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail" ref="sendEmail"></property>
+		<property name="cronExpression" value="5 10 10 ? * *" >
+		</property>
+	</bean>
+	<!-- ======================== 调度工厂 ======================== -->
+	<!-- triggers：通过再添加其他的ref元素可在list中放置多个触发器 -->
+<!--
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="CronTriggerSendEmail"/>
+				<ref bean="cranTiggerPrintTime"></ref>
+			</list>
+		</property>
+	</bean>
+-->
+
+</beans>

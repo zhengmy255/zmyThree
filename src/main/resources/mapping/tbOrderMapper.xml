@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gb.dao.tbOrderMapper" >
+  <resultMap id="BaseResultMap" type="com.gb.pojo.tbOrder" >
+    <id column="ORDER_ID" property="orderId" jdbcType="VARCHAR" />
+    <result column="PAYMENT" property="payment" jdbcType="VARCHAR" />
+    <!--关联-->
+    <result column="PAYMENT_TYPE" property="paymentType" jdbcType="DECIMAL" />
+    <result column="POST_FEE" property="postFee" jdbcType="VARCHAR" />
+    <!--关联-->
+    <result column="STATUS" property="status" jdbcType="DECIMAL" />
+
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
+
+    <result column="UPDATE_TIME" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="PAYMENT_TIME" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="CONSIGN_TIME" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="END_TIME" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="CLOSE_TIME" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="SHIPPING_NAME" property="shippingName" jdbcType="VARCHAR" />
+    <result column="SHIPPING_CODE" property="shippingCode" jdbcType="VARCHAR" />
+    <!--关联-->
+    <result column="USER_ID" property="userId" jdbcType="DECIMAL" />
+    <result column="BUYER_MESSAGE" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="BUYER_NICK" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="BUYER_RATE" property="buyerRate" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ORDER_ID, PAYMENT, PAYMENT_TYPE, POST_FEE, STATUS, CREATE_TIME, UPDATE_TIME, PAYMENT_TIME, 
+    CONSIGN_TIME, END_TIME, CLOSE_TIME, SHIPPING_NAME, SHIPPING_CODE, USER_ID, BUYER_MESSAGE, 
+    BUYER_NICK, BUYER_RATE
+  </sql>
+
+  <sql id="columnList" >
+    o.ORDER_ID,
+    o.PAYMENT,
+    o.PAYMENT_TYPE,
+    o.POST_FEE,
+    o.STATUS,
+    o.CREATE_TIME,
+    o.UPDATE_TIME,
+    o.PAYMENT_TIME,
+    o.CONSIGN_TIME,
+    o.END_TIME,
+    o.CLOSE_TIME,
+    o.SHIPPING_NAME,
+    o.SHIPPING_CODE,
+    o.USER_ID,
+    o.BUYER_MESSAGE,
+    o.BUYER_NICK,
+    o.BUYER_RATE
+  </sql>
+
+
+
+  <resultMap id="selectOrderListExcelMap" type="com.gb.pojo.tbOrder">
+    <!--订单表本身字段-->
+    <id column="orderid" property="orderId" jdbcType="VARCHAR" />
+    <result column="payment" property="payment" jdbcType="VARCHAR" />
+    <result column="postfee" property="postFee" jdbcType="VARCHAR" />
+    <result column="createtime" property="createTime" jdbcType="TIMESTAMP" />
+
+    <result column="updatetime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="paymenttime" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consingtime" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="endtime" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="closetime" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="shippingname" property="shippingName" jdbcType="VARCHAR" />
+    <result column="shippingcode" property="shippingCode" jdbcType="VARCHAR" />
+    <!--关联查询workbook表 订单信息-->
+    <association property="pay" javaType="com.gb.pojo.Workbook" >
+      <id column="paytypeid" property="id" jdbcType="DECIMAL" />
+      <result column="paytype" property="describe" jdbcType="VARCHAR" />
+    </association>
+    <!--关联查询 订单状态信息-->
+    <association property="orderStatus" javaType="com.gb.pojo.Workbook" >
+      <id column="orderstatusid" property="id" jdbcType="DECIMAL" />
+      <result column="orderstatus" property="describe" jdbcType="VARCHAR" />
+    </association>
+
+    <!--关联查询 用户是否已评价-->
+    <association property="userBuyerRate" javaType="com.gb.pojo.Workbook" >
+      <id column="orderbuyerrateid" property="id" jdbcType="DECIMAL" />
+      <result column="orderbuyerrate" property="describe" jdbcType="VARCHAR" />
+    </association>
+    <!--关联查询 用户名称-->
+    <association property="userInfo" javaType="com.gb.pojo.User" >
+      <id column="userid" property="id" jdbcType="DECIMAL" />
+      <result column="username" property="username" jdbcType="VARCHAR" />
+    </association>
+
+  </resultMap>
+
+
+
+
+
+
+
+
+
+
+
+<!--  &lt;!&ndash; 批量新增user对象 &ndash;&gt;
+  <insert id="insertUserBatch" parameterType="java.util.ArrayList">
+    &lt;!&ndash; 	selectKey 主键
+            keyProperty 主键对应属性
+            keyColumn 主键对于的字段
+            resultType 返回类型 &ndash;&gt;
+    &lt;!&ndash;  		<selectKey keyProperty="id" keyColumn="id" resultType="Integer" order="BEFORE">
+                 select seq_user_id.nextval as id from dual
+             </selectKey> &ndash;&gt;
+    insert into TB_USER  ( <include refid="Base_Column_List"/>)
+    values
+    <foreach collection="list"  item="u" index="i" separator=";">
+      (
+      #{u.id},#{u.username},#{u.password},#{u.phone},#{u.email},#{u.created},#{u.updated}
+      )
+    </foreach>
+  </insert>-->
+
+
+
+
+
+
+
+
+
+
+
+  <!--表联查-->
+
+  <select id="selectOrderList" resultMap="selectOrderListExcelMap">
+    SELECT
+    t1.order_id  as orderid ,
+    t1.payment  as payment ,
+    t1.create_time as createtime ,
+    t1.post_fee as postfee ,
+    t1.UPDATE_TIME AS updatetime,
+    t1.PAYMENT_TIME AS paymenttime,
+    t1.CONSIGN_TIME AS consingtime,
+    t1.END_TIME AS endtime,
+    t1.CLOSE_TIME AS closetime,
+    t1.SHIPPING_NAME AS shippingname,
+    t1.SHIPPING_CODE AS shippingcode,
+    t2.id as paytypeid ,
+    t2.describe  as paytype ,
+    t3.id as orderstatusid,
+    t3.describe as orderstatus ,
+    t5.id as orderbuyerrateid,
+    t5.describe as orderbuyerrate ,
+    t4.username as username,
+    t4.id as userid
+    FROM tb_order t1
+    LEFT JOIN tb_workbook t2 on t1.PAYMENT_TYPE = t2.code
+    LEFT JOIN tb_workbook t3 on t1.STATUS = t3.code
+    LEFT JOIN tb_workbook t5 on t1.BUYER_RATE = t5.code
+    LEFT JOIN tb_user t4 on t1.user_id = t4.id
+  </select>
+
+
+  <!--分页条件总条数-->
+  <!--条件查询的总条数-->
+  <select id="selectCount" resultType="java.lang.Integer" parameterType="com.gb.pojo.tbOrder">
+    SELECT COUNT (ORDER_ID) FROM TB_ORDER
+  </select>
+
+<!--商品分页单表查询-->
+  <!--分页条件查询-->
+  <select id="selectOrderCat" resultMap="selectOrderListExcelMap" parameterType="com.gb.pojo.tbOrder">
+
+    select b.* from(
+    select a.* from
+    (SELECT
+    t1.order_id  as orderid ,
+    t1.payment  as payment ,
+    t1.create_time as createtime ,
+    t1.post_fee as postfee ,
+    t1.UPDATE_TIME AS updatetime,
+    t1.PAYMENT_TIME AS paymenttime,
+    t1.CONSIGN_TIME AS consingtime,
+    t1.END_TIME AS endtime,
+    t1.CLOSE_TIME AS closetime,
+    t1.SHIPPING_NAME AS shippingname,
+    t1.SHIPPING_CODE AS shippingcode,
+    t2.id as paytypeid ,
+    t2.describe  as paytype ,
+    t3.id as orderstatusid,
+    t3.describe as orderstatus ,
+    t5.id as orderbuyerrateid,
+    t5.describe as orderbuyerrate ,
+    t4.username as username,
+    t4.id as userid,rownum r
+    FROM tb_order t1
+    LEFT JOIN tb_workbook t2 on t1.PAYMENT_TYPE = t2.code
+    LEFT JOIN tb_workbook t3 on t1.STATUS = t3.code
+    LEFT JOIN tb_workbook t5 on t1.BUYER_RATE = t5.code
+    LEFT JOIN tb_user t4 on t1.user_id = t4.id
+    ) a
+    <where>
+      <trim prefixOverrides="and">
+        <if test="end!=null">
+          and rownum &lt;#{end}
+        </if>
+      </trim>
+    </where>
+    ) b
+    where r &gt;#{start}
+
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from TB_ORDER
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from TB_ORDER
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gb.pojo.tbOrder" >
+    insert into TB_ORDER (ORDER_ID, PAYMENT, PAYMENT_TYPE, 
+      POST_FEE, STATUS, CREATE_TIME, 
+      UPDATE_TIME, PAYMENT_TIME, CONSIGN_TIME, 
+      END_TIME, CLOSE_TIME, SHIPPING_NAME, 
+      SHIPPING_CODE, USER_ID, BUYER_MESSAGE, 
+      BUYER_NICK, BUYER_RATE)
+    values (#{orderId,jdbcType=VARCHAR}, #{payment,jdbcType=VARCHAR}, #{paymentType,jdbcType=DECIMAL}, 
+      #{postFee,jdbcType=VARCHAR}, #{status,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{paymentTime,jdbcType=TIMESTAMP}, #{consignTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{closeTime,jdbcType=TIMESTAMP}, #{shippingName,jdbcType=VARCHAR}, 
+      #{shippingCode,jdbcType=VARCHAR}, #{userId,jdbcType=DECIMAL}, #{buyerMessage,jdbcType=VARCHAR}, 
+      #{buyerNick,jdbcType=VARCHAR}, #{buyerRate,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gb.pojo.tbOrder" >
+    insert into TB_ORDER
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        ORDER_ID,
+      </if>
+      <if test="payment != null" >
+        PAYMENT,
+      </if>
+      <if test="paymentType != null" >
+        PAYMENT_TYPE,
+      </if>
+      <if test="postFee != null" >
+        POST_FEE,
+      </if>
+      <if test="status != null" >
+        STATUS,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME,
+      </if>
+      <if test="paymentTime != null" >
+        PAYMENT_TIME,
+      </if>
+      <if test="consignTime != null" >
+        CONSIGN_TIME,
+      </if>
+      <if test="endTime != null" >
+        END_TIME,
+      </if>
+      <if test="closeTime != null" >
+        CLOSE_TIME,
+      </if>
+      <if test="shippingName != null" >
+        SHIPPING_NAME,
+      </if>
+      <if test="shippingCode != null" >
+        SHIPPING_CODE,
+      </if>
+      <if test="userId != null" >
+        USER_ID,
+      </if>
+      <if test="buyerMessage != null" >
+        BUYER_MESSAGE,
+      </if>
+      <if test="buyerNick != null" >
+        BUYER_NICK,
+      </if>
+      <if test="buyerRate != null" >
+        BUYER_RATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="payment != null" >
+        #{payment,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null" >
+        #{paymentType,jdbcType=DECIMAL},
+      </if>
+      <if test="postFee != null" >
+        #{postFee,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consignTime != null" >
+        #{consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeTime != null" >
+        #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shippingName != null" >
+        #{shippingName,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingCode != null" >
+        #{shippingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="buyerMessage != null" >
+        #{buyerMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNick != null" >
+        #{buyerNick,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerRate != null" >
+        #{buyerRate,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gb.pojo.tbOrder" >
+    update TB_ORDER
+    <set >
+      <if test="payment != null" >
+        PAYMENT = #{payment,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentType != null" >
+        PAYMENT_TYPE = #{paymentType,jdbcType=DECIMAL},
+      </if>
+      <if test="postFee != null" >
+        POST_FEE = #{postFee,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        STATUS = #{status,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="paymentTime != null" >
+        PAYMENT_TIME = #{paymentTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="consignTime != null" >
+        CONSIGN_TIME = #{consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="closeTime != null" >
+        CLOSE_TIME = #{closeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shippingName != null" >
+        SHIPPING_NAME = #{shippingName,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingCode != null" >
+        SHIPPING_CODE = #{shippingCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        USER_ID = #{userId,jdbcType=DECIMAL},
+      </if>
+      <if test="buyerMessage != null" >
+        BUYER_MESSAGE = #{buyerMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerNick != null" >
+        BUYER_NICK = #{buyerNick,jdbcType=VARCHAR},
+      </if>
+      <if test="buyerRate != null" >
+        BUYER_RATE = #{buyerRate,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gb.pojo.tbOrder" >
+    update TB_ORDER
+    set PAYMENT = #{payment,jdbcType=VARCHAR},
+      PAYMENT_TYPE = #{paymentType,jdbcType=DECIMAL},
+      POST_FEE = #{postFee,jdbcType=VARCHAR},
+      STATUS = #{status,jdbcType=DECIMAL},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      UPDATE_TIME = #{updateTime,jdbcType=TIMESTAMP},
+      PAYMENT_TIME = #{paymentTime,jdbcType=TIMESTAMP},
+      CONSIGN_TIME = #{consignTime,jdbcType=TIMESTAMP},
+      END_TIME = #{endTime,jdbcType=TIMESTAMP},
+      CLOSE_TIME = #{closeTime,jdbcType=TIMESTAMP},
+      SHIPPING_NAME = #{shippingName,jdbcType=VARCHAR},
+      SHIPPING_CODE = #{shippingCode,jdbcType=VARCHAR},
+      USER_ID = #{userId,jdbcType=DECIMAL},
+      BUYER_MESSAGE = #{buyerMessage,jdbcType=VARCHAR},
+      BUYER_NICK = #{buyerNick,jdbcType=VARCHAR},
+      BUYER_RATE = #{buyerRate,jdbcType=DECIMAL}
+    where ORDER_ID = #{orderId,jdbcType=VARCHAR}
+  </update>
+</mapper>

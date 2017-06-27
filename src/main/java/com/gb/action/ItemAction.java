@@ -36,8 +36,9 @@ public class ItemAction {
 
     @RequestMapping("upImg")
     @ResponseBody
-    public ModelAndView upImg(HttpServletRequest request, @RequestParam("upfile") MultipartFile file){
+    public ReturnJson upImg(HttpServletRequest request, @RequestParam("upfile") MultipartFile file){
         ModelAndView mv=new ModelAndView();
+        ReturnJson rj=new ReturnJson();
 
         //获取上传的文件名称
         String filename = file.getOriginalFilename();
@@ -60,7 +61,8 @@ public class ItemAction {
             bis = new BufferedInputStream(inputStream);
             //截取文件后缀
             String suffix =  filename.substring(filename.lastIndexOf("."));
-            fos = new FileOutputStream(realPath+"/"+ UUID.randomUUID().toString()+suffix);
+            String name = UUID.randomUUID().toString() + suffix;
+            fos = new FileOutputStream(realPath+"/"+ name);
             bos = new BufferedOutputStream(fos);
             byte [] b = new  byte[2048];
             int s = 0;
@@ -70,10 +72,13 @@ public class ItemAction {
             }
             mv.addObject("msg","上传文件成功");
             mv.setViewName("ok");
+
+            rj.setMsg(name);
         } catch (IOException e) {
             e.printStackTrace();
             mv.addObject("msg","上传文件失败");
             mv.setViewName("error");
+            rj.setMsg("上传文件失败");
         }finally{
             try {
                 if (bos != null) {
@@ -99,10 +104,9 @@ public class ItemAction {
                 e.printStackTrace();
             }
         }
-
-
-        return mv;
+        return rj;
     }
+
 
 
     //导出Excel

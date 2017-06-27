@@ -105,15 +105,10 @@
             //'fileSizeLimit' : '2MB',
             //   文件上传成功后调用的函数
             'onUploadSuccess': function (file, data, response) {
+                var s=eval("("+data+")")
+                var src ='<%=request.getContextPath() %>/uploadImg/'+s.msg;
+                $("#showImg").append("<img src='" + src + "' style='width:200px'/>");
 
-
-                var src = '<%=request.getContextPath() %>/' + data;
-                $("#showImg").append("<img src='" + src + "' style='width:100px'/>");
-                //alert(data);
-                <%--if(data.success){--%>
-                <%--$("#addZipDiv").dialog('close');--%>
-                <%--location.href="<%=request.getContextPath()%>/show/show.hzx";--%>
-                <%--}--%>
 
             }
         });
